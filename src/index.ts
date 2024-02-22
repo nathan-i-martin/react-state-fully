@@ -4,8 +4,9 @@ const useGeneric = <T extends any> (initial: T) => {
     const [state, setState] = useState(initial);
 
     return {
-        get: () => state,
-        set: (value: T) => setState(value),
+        get:    () => state,
+        set:    (value: T) => setState(value),
+        equals: (value: T) => value === state,
     };
 }
 
@@ -54,7 +55,7 @@ const useMap = <K, V> (initial?: Map<K, V>) => {
         put:        (key: K, value: V)  => state.set(new Map(state.get()).set(key, value)),
         remove:     (key: K)            => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains:   (key: K)            => state.get().has(key),
-        size:       ()                  => state.get().size,
+        size:       ()                  => state.get().size
     };
 }
 
@@ -71,6 +72,7 @@ const useNumber = (initial?: number) => {
         mod:        (value: number) => state.set(state.get() % value),
         increment:  ()              => state.set(state.get() + 1),
         decrement:  ()              => state.set(state.get() - 1),
+        equals:     (value: number) => state.equals(value),
     };
 }
 
@@ -81,6 +83,7 @@ const useBoolean = (initial?: boolean) => {
         get:    ()                  => state.get(),
         set:    (value: boolean)    => state.set(value),
         toggle: ()                  => state.set(!state),
+        equals: (value: boolean)    => state.equals(value),
     };
 }
 
@@ -94,6 +97,7 @@ const useString = (initial?: string) => {
         append:     (value: string) => state.set(state.get() + value),
         prepend:    (value: string) => state.set(value + state.get()),
         size:       ()              => state.get().length,
+        equals:     (value: string) => state.equals(value),
     };
 }
 
