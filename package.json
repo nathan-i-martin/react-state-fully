@@ -1,11 +1,11 @@
 {
-  "name": "state-fully",
+  "name": "react-state-fully",
   "version": "1.0.0",
   "description": "Easily add media breakpoints to your react project",
   "private": false,
   "author": "Nathan Martin",
   "license": "MIT",
-  "repository": "https://github.com/nmartin42/state-fully.git",
+  "repository": "https://github.com/nmartin42/react-state-fully.git",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
