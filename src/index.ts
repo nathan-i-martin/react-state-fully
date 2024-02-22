@@ -1,15 +1,36 @@
 import { useState } from "react";
 
-const useGeneric = <T extends any> (initial: T) => {
+type GenericState<T> = {
+    get:    () => T,
+    set:    (value: T) => void,
+    equals: (value: T) => boolean,
+}
+const useGeneric = <T> (initial: T) => {
     const [state, setState] = useState(initial);
 
     return {
         get:    () => state,
         set:    (value: T) => setState(value),
         equals: (value: T) => value === state,
-    };
+    } as GenericState<T>;
 }
 
+export type ArrayState<V> = {
+    get:            ()                          => V,
+    set:            (array: V[])                => void,
+    getValue:       (index: number)             => V | undefined,
+    getFirstValue:  ()                          => V | undefined,
+    getLastValue:   ()                          => V | undefined,
+    push:           (item: V)                   => void,
+    pop:            ()                          => void,
+    add:            (item: V)                   => void,
+    put:            (index: number, value: V)   => void,
+    remove:         (index: number)             => void,
+    contains:       (item: V)                   => boolean,
+    size:           ()                          => number,
+
+    map:            (callback: (item: V, index: number) => any) => any[],
+}
 const useArray = <V> (initial?: V[]) => {
     const state = useGeneric(initial ?? []);
 
@@ -28,9 +49,19 @@ const useArray = <V> (initial?: V[]) => {
         size:           ()                          => state.get().length,
 
         map:            (callback: (item: V, index: number) => any) => state.get().map(callback),
-    };
+    } as ArrayState<V>;
 }
 
+export type SetState<V> = {
+    get:        ()              => V,
+    set:        (set: Set<V>)   => void,
+    add:        (item: V)       => void,
+    remove:     (item: V)       => void,
+    contains:   (item: V)       => boolean,
+    size:       ()              => number,
+
+    map:            (callback: (item: V, index: number) => any) => any[],
+}
 const useSet = <V> (initial?: Set<V>) => {
     const state = useGeneric(initial ?? new Set<V>());
 
@@ -43,9 +74,17 @@ const useSet = <V> (initial?: Set<V>) => {
         size:       ()              => state.get().size,
 
         map:        (callback: (item: V, index: number) => any) => Array.from(state.get()).map(callback),
-    };
+    } as SetState<V>;
 }
 
+export type MapState<K, V> = {
+    get:        ()                  => V,
+    set:        (map: Map<K,V>)     => void,
+    put:        (key: K, value: V)  => void,
+    remove:     (key: K)            => void,
+    contains:   (key: K)            => boolean,
+    size:       ()                  => number
+}
 const useMap = <K, V> (initial?: Map<K, V>) => {
     const state = useGeneric(initial ?? new Map<K, V>());
 
@@ -56,9 +95,21 @@ const useMap = <K, V> (initial?: Map<K, V>) => {
         remove:     (key: K)            => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains:   (key: K)            => state.get().has(key),
         size:       ()                  => state.get().size
-    };
+    } as MapState<K, V>;
 }
 
+export type NumberState = {
+    get:        ()              => number,
+    set:        (value: number) => void,
+    add:        (value: number) => void,
+    subtract:   (value: number) => void,
+    multiply:   (value: number) => void,
+    divide:     (value: number) => void,
+    mod:        (value: number) => void,
+    increment:  ()              => void,
+    decrement:  ()              => void,
+    equals:     (value: number) => boolean,
+}
 const useNumber = (initial?: number) => {
     const state = useGeneric(initial ?? 0);
 
@@ -73,9 +124,15 @@ const useNumber = (initial?: number) => {
         increment:  ()              => state.set(state.get() + 1),
         decrement:  ()              => state.set(state.get() - 1),
         equals:     (value: number) => state.equals(value),
-    };
+    } as NumberState;
 }
 
+export type BooleanState = {
+    get:    ()                  => boolean,
+    set:    (value: boolean)    => void,
+    toggle: ()                  => void,
+    equals: (value: boolean)    => boolean,
+}
 const useBoolean = (initial?: boolean) => {
     const state = useGeneric(initial ?? false);
 
@@ -84,21 +141,30 @@ const useBoolean = (initial?: boolean) => {
         set:    (value: boolean)    => state.set(value),
         toggle: ()                  => state.set(!state),
         equals: (value: boolean)    => state.equals(value),
-    };
+    } as BooleanState;
 }
 
+export type StringState = {
+    get:        ()                  => string,
+    set:        (value: string)     => void,
+    concat:     (value: string)     => void,
+    append:     (value: string)     => void,
+    prepend:    (value: string)     => void,
+    size:       ()                  => number,
+    equals:     (value: string)     => boolean,
+}
 const useString = (initial?: string) => {
     const state = useGeneric(initial ?? "");
 
     return {
-        get:        () =>              state.get(),
+        get:        ()              => state.get(),
         set:        (value: string) => state.set(value),
         concat:     (value: string) => state.set(state.get() + value),
         append:     (value: string) => state.set(state.get() + value),
         prepend:    (value: string) => state.set(value + state.get()),
         size:       ()              => state.get().length,
         equals:     (value: string) => state.equals(value),
-    };
+    } as StringState;
 }
 
 /*interface Optional<T> {
@@ -108,7 +174,7 @@ const useString = (initial?: string) => {
     exists: () => boolean
 }*/
 
-const State = {
+export const State = {
     useArray,
     useSet,
     useGeneric,
@@ -117,5 +183,3 @@ const State = {
     useString,
     useBoolean
 };
-
-export { State };

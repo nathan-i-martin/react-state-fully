@@ -5,6 +5,7 @@ const useGeneric = (initial) => {
     return {
         get: () => state,
         set: (value) => setState(value),
+        equals: (value) => value === state,
     };
 };
 const useArray = (initial) => {
@@ -45,7 +46,7 @@ const useMap = (initial) => {
         put: (key, value) => state.set(new Map(state.get()).set(key, value)),
         remove: (key) => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains: (key) => state.get().has(key),
-        size: () => state.get().size,
+        size: () => state.get().size
     };
 };
 const useNumber = (initial) => {
@@ -60,6 +61,7 @@ const useNumber = (initial) => {
         mod: (value) => state.set(state.get() % value),
         increment: () => state.set(state.get() + 1),
         decrement: () => state.set(state.get() - 1),
+        equals: (value) => state.equals(value),
     };
 };
 const useBoolean = (initial) => {
@@ -68,6 +70,7 @@ const useBoolean = (initial) => {
         get: () => state.get(),
         set: (value) => state.set(value),
         toggle: () => state.set(!state),
+        equals: (value) => state.equals(value),
     };
 };
 const useString = (initial) => {
@@ -79,6 +82,7 @@ const useString = (initial) => {
         append: (value) => state.set(state.get() + value),
         prepend: (value) => state.set(value + state.get()),
         size: () => state.get().length,
+        equals: (value) => state.equals(value),
     };
 };
 /*interface Optional<T> {
