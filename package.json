@@ -5,7 +5,7 @@
   "private": false,
   "author": "Nathan Martin",
   "license": "MIT",
-  "repository": "https://github.com/nmartin42/react-state-fully.git",
+  "repository": "https://github.com/nathan-i-martin/react-state-fully.git",
   "type": "module",
   "main": "dist/index.js",
   "scripts": {
