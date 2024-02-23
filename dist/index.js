@@ -25,7 +25,8 @@ const useArray = (initial) => {
         size: () => state.get().length,
         clear: () => state.set([]),
         isEmpty: () => state.get().length == 0,
-        map: (callback) => state.get().map(callback),
+        map: (callback, thisArg) => state.get().map(callback, thisArg),
+        forEach: (callback, thisArg) => state.get().forEach(callback, thisArg),
     };
 };
 const useSet = (initial) => {
@@ -39,7 +40,8 @@ const useSet = (initial) => {
         size: () => state.get().size,
         clear: () => state.set(new Set()),
         isEmpty: () => state.get().size == 0,
-        map: (callback) => Array.from(state.get()).map(callback),
+        map: (callback, thisArg) => Array.from(state.get()).map(callback, thisArg),
+        forEach: (callback, thisArg) => state.get().forEach(callback, thisArg),
     };
 };
 const useMap = (initial) => {
@@ -53,6 +55,8 @@ const useMap = (initial) => {
         size: () => state.get().size,
         clear: () => state.set(new Map()),
         isEmpty: () => state.get().size == 0,
+        map: (callback, thisArg) => Object.entries(state.get()).map(callback, thisArg),
+        forEach: (callback, thisArg) => Object.entries(state.get()).forEach(callback, thisArg),
     };
 };
 const useNumber = (initial) => {

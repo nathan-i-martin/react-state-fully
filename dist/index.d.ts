@@ -18,7 +18,8 @@ export type ArrayState<V> = {
     size: () => number;
     isEmpty: () => boolean;
     clear: () => void;
-    map: (callback: (item: V, index: number) => any) => any[];
+    map: (callback: (value: V, index: number, array: V[]) => any, thisArg?: any) => any[];
+    forEach: (callback: (value: V, index: number, array: V[]) => void, thisArg?: any) => void;
 };
 export type SetState<V> = {
     get: () => V;
@@ -29,17 +30,20 @@ export type SetState<V> = {
     size: () => number;
     isEmpty: () => boolean;
     clear: () => void;
-    map: (callback: (item: V, index: number) => any) => any[];
+    map: (callback: (value: V, index: number, array: V[]) => any, thisArg?: any) => any[];
+    forEach: (callback: (value: V, value2: V, set: Set<V>) => void, thisArg?: any) => void;
 };
-export type MapState<K, V> = {
+export type MapState<V> = {
     get: () => V;
-    set: (map: Map<K, V>) => void;
-    put: (key: K, value: V) => void;
-    remove: (key: K) => void;
-    contains: (key: K) => boolean;
+    set: (map: Map<string, V>) => void;
+    put: (key: string, value: V) => void;
+    remove: (key: string) => void;
+    contains: (key: string) => boolean;
     size: () => number;
     isEmpty: () => boolean;
     clear: () => void;
+    map: (callback: (value: [string, any], index: number, array: [string, any][]) => any, thisArg?: any) => any[];
+    forEach: (callback: (value: [string, any], index: number, array: [string, any][]) => void, thisArg?: any) => void;
 };
 export type NumberState = {
     get: () => number;
@@ -74,7 +78,7 @@ export declare const State: {
     useArray: <V>(initial?: V[] | undefined) => ArrayState<V>;
     useSet: <V_1>(initial?: Set<V_1> | undefined) => SetState<V_1>;
     useGeneric: <T>(initial: T) => GenericState<T>;
-    useMap: <K, V_2>(initial?: Map<K, V_2> | undefined) => MapState<K, V_2>;
+    useMap: <V_2>(initial?: Map<string, V_2> | undefined) => MapState<V_2>;
     useNumber: (initial?: number) => NumberState;
     useString: (initial?: string) => StringState;
     useBoolean: (initial?: boolean) => BooleanState;
