@@ -141,6 +141,8 @@ const useBoolean = (initial?: boolean) => {
         set:    (value: boolean)    => state.set(value),
         toggle: ()                  => state.set(!state),
         equals: (value: boolean)    => state.equals(value),
+        true:   ()                  => state.set(true),
+        false:  ()                  => state.set(false),
     } as BooleanState;
 }
 

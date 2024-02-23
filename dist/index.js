@@ -71,6 +71,8 @@ const useBoolean = (initial) => {
         set: (value) => state.set(value),
         toggle: () => state.set(!state),
         equals: (value) => state.equals(value),
+        true: () => state.set(true),
+        false: () => state.set(false),
     };
 };
 const useString = (initial) => {
