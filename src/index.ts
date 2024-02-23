@@ -31,7 +31,8 @@ export type ArrayState<V> = {
     isEmpty:        ()                          => boolean,
     clear:          ()                          => void,
 
-    map:            (callback: (item: V, index: number) => any) => any[],
+    map:            (callback: (value: V, index: number, array: V[]) => any,  thisArg?: any) => any[],
+    forEach:        (callback: (value: V, index: number, array: V[]) => void, thisArg?: any) => void,
 }
 const useArray = <V> (initial?: V[]) => {
     const state = useGeneric(initial ?? []);
@@ -52,7 +53,8 @@ const useArray = <V> (initial?: V[]) => {
         clear:          ()                          => state.set([]),
         isEmpty:        ()                          => state.get().length == 0,
 
-        map:            (callback: (item: V, index: number) => any) => state.get().map(callback),
+        map:            (callback: (value: V, index: number, array: V[]) => any,  thisArg?: any) => state.get().map(callback, thisArg),
+        forEach:        (callback: (value: V, index: number, array: V[]) => void, thisArg?: any) => state.get().forEach(callback, thisArg),
     } as ArrayState<V>;
 }
 
@@ -66,7 +68,8 @@ export type SetState<V> = {
     isEmpty:    ()              => boolean,
     clear:      ()              => void,
 
-    map:            (callback: (item: V, index: number) => any) => any[],
+    map:        (callback: (value: V, index: number, array: V[]) => any, thisArg?: any) => any[],
+    forEach:    (callback: (value: V, value2: V, set: Set<V>) => void,   thisArg?: any) => void,
 }
 const useSet = <V> (initial?: Set<V>) => {
     const state = useGeneric(initial ?? new Set<V>());
@@ -81,33 +84,40 @@ const useSet = <V> (initial?: Set<V>) => {
         clear:      ()              => state.set(new Set()),
         isEmpty:    ()              => state.get().size == 0,
 
-        map:        (callback: (item: V, index: number) => any) => Array.from(state.get()).map(callback),
+        map:        (callback: (value: V, index: number, array: V[]) => any,  thisArg?: any) => Array.from(state.get()).map(callback, thisArg),
+        forEach:    (callback: (value: V, value2: V,    set: Set<V>) => void, thisArg?: any) => state.get().forEach(callback, thisArg),
     } as SetState<V>;
 }
 
-export type MapState<K, V> = {
-    get:        ()                  => V,
-    set:        (map: Map<K,V>)     => void,
-    put:        (key: K, value: V)  => void,
-    remove:     (key: K)            => void,
-    contains:   (key: K)            => boolean,
-    size:       ()                  => number,
-    isEmpty:    ()                  => boolean,
-    clear:      ()                  => void,
+export type MapState<V> = {
+    get:        ()                      => V,
+    set:        (map: Map<string,V>)    => void,
+    put:        (key: string, value: V) => void,
+    remove:     (key: string)           => void,
+    contains:   (key: string)           => boolean,
+    size:       ()                      => number,
+    isEmpty:    ()                      => boolean,
+    clear:      ()                      => void,
+
+    map:        (callback: (value: [string, any], index: number, array: [string, any][]) => any,  thisArg?: any) => any[],
+    forEach:    (callback: (value: [string, any], index: number, array: [string, any][]) => void, thisArg?: any) => void
 }
-const useMap = <K, V> (initial?: Map<K, V>) => {
-    const state = useGeneric(initial ?? new Map<K, V>());
+const useMap = <V> (initial?: Map<string, V>) => {
+    const state = useGeneric(initial ?? new Map<string, V>());
 
     return {
-        get:        ()                  => state.get(),
-        set:        (map: Map<K,V>)     => state.set(map),
-        put:        (key: K, value: V)  => state.set(new Map(state.get()).set(key, value)),
-        remove:     (key: K)            => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
-        contains:   (key: K)            => state.get().has(key),
-        size:       ()                  => state.get().size,
-        clear:      ()                  => state.set(new Map()),
-        isEmpty:    ()                  => state.get().size == 0,
-    } as MapState<K, V>;
+        get:        ()                          => state.get(),
+        set:        (map: Map<string,V>)        => state.set(map),
+        put:        (key: string, value: V)     => state.set(new Map(state.get()).set(key, value)),
+        remove:     (key: string)               => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
+        contains:   (key: string)               => state.get().has(key),
+        size:       ()                          => state.get().size,
+        clear:      ()                          => state.set(new Map()),
+        isEmpty:    ()                          => state.get().size == 0,
+
+        map:        (callback: (value: [string, any], index: number, array: [string, any][]) => any,  thisArg?: any) => Object.entries(state.get()).map(callback, thisArg),
+        forEach:    (callback: (value: [string, any], index: number, array: [string, any][]) => void, thisArg?: any) => Object.entries(state.get()).forEach(callback, thisArg),
+    } as MapState<V>;
 }
 
 export type NumberState = {

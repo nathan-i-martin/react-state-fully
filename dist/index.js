@@ -23,6 +23,8 @@ const useArray = (initial) => {
         remove: (index) => { const newArray = [...state.get()]; newArray.splice(index, 1); state.set(newArray); },
         contains: (item) => state.get().includes(item),
         size: () => state.get().length,
+        clear: () => state.set([]),
+        isEmpty: () => state.get().length == 0,
         map: (callback) => state.get().map(callback),
     };
 };
@@ -35,6 +37,8 @@ const useSet = (initial) => {
         remove: (item) => { const newHashSet = new Set(state.get()); newHashSet.delete(item); state.set(newHashSet); },
         contains: (item) => state.get().has(item),
         size: () => state.get().size,
+        clear: () => state.set(new Set()),
+        isEmpty: () => state.get().size == 0,
         map: (callback) => Array.from(state.get()).map(callback),
     };
 };
@@ -46,7 +50,9 @@ const useMap = (initial) => {
         put: (key, value) => state.set(new Map(state.get()).set(key, value)),
         remove: (key) => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains: (key) => state.get().has(key),
-        size: () => state.get().size
+        size: () => state.get().size,
+        clear: () => state.set(new Map()),
+        isEmpty: () => state.get().size == 0,
     };
 };
 const useNumber = (initial) => {

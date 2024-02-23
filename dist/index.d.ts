@@ -16,6 +16,8 @@ export type ArrayState<V> = {
     remove: (index: number) => void;
     contains: (item: V) => boolean;
     size: () => number;
+    isEmpty: () => boolean;
+    clear: () => void;
     map: (callback: (item: V, index: number) => any) => any[];
 };
 export type SetState<V> = {
@@ -25,6 +27,8 @@ export type SetState<V> = {
     remove: (item: V) => void;
     contains: (item: V) => boolean;
     size: () => number;
+    isEmpty: () => boolean;
+    clear: () => void;
     map: (callback: (item: V, index: number) => any) => any[];
 };
 export type MapState<K, V> = {
@@ -34,6 +38,8 @@ export type MapState<K, V> = {
     remove: (key: K) => void;
     contains: (key: K) => boolean;
     size: () => number;
+    isEmpty: () => boolean;
+    clear: () => void;
 };
 export type NumberState = {
     get: () => number;
