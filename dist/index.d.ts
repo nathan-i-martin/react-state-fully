@@ -52,6 +52,8 @@ export type BooleanState = {
     set: (value: boolean) => void;
     toggle: () => void;
     equals: (value: boolean) => boolean;
+    true: () => void;
+    false: () => void;
 };
 export type StringState = {
     get: () => string;

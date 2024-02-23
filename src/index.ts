@@ -28,6 +28,8 @@ export type ArrayState<V> = {
     remove:         (index: number)             => void,
     contains:       (item: V)                   => boolean,
     size:           ()                          => number,
+    isEmpty:        ()                          => boolean,
+    clear:          ()                          => void,
 
     map:            (callback: (item: V, index: number) => any) => any[],
 }
@@ -47,6 +49,8 @@ const useArray = <V> (initial?: V[]) => {
         remove:         (index: number)             => { const newArray = [...state.get()]; newArray.splice(index, 1); state.set(newArray); },
         contains:       (item: V)                   => state.get().includes(item),
         size:           ()                          => state.get().length,
+        clear:          ()                          => state.set([]),
+        isEmpty:        ()                          => state.get().length == 0,
 
         map:            (callback: (item: V, index: number) => any) => state.get().map(callback),
     } as ArrayState<V>;
@@ -59,6 +63,8 @@ export type SetState<V> = {
     remove:     (item: V)       => void,
     contains:   (item: V)       => boolean,
     size:       ()              => number,
+    isEmpty:    ()              => boolean,
+    clear:      ()              => void,
 
     map:            (callback: (item: V, index: number) => any) => any[],
 }
@@ -66,12 +72,14 @@ const useSet = <V> (initial?: Set<V>) => {
     const state = useGeneric(initial ?? new Set<V>());
 
     return {
-        get:        ()                          => state.get(),
-        set:        (set: Set<V>)               => state.set(set),
+        get:        ()              => state.get(),
+        set:        (set: Set<V>)   => state.set(set),
         add:        (item: V)       => state.set(new Set([...state.get(), item])),
         remove:     (item: V)       => { const newHashSet = new Set(state.get()); newHashSet.delete(item); state.set(newHashSet); },
         contains:   (item: V)       => state.get().has(item),
         size:       ()              => state.get().size,
+        clear:      ()              => state.set(new Set()),
+        isEmpty:    ()              => state.get().size == 0,
 
         map:        (callback: (item: V, index: number) => any) => Array.from(state.get()).map(callback),
     } as SetState<V>;
@@ -83,7 +91,9 @@ export type MapState<K, V> = {
     put:        (key: K, value: V)  => void,
     remove:     (key: K)            => void,
     contains:   (key: K)            => boolean,
-    size:       ()                  => number
+    size:       ()                  => number,
+    isEmpty:    ()                  => boolean,
+    clear:      ()                  => void,
 }
 const useMap = <K, V> (initial?: Map<K, V>) => {
     const state = useGeneric(initial ?? new Map<K, V>());
@@ -94,7 +104,9 @@ const useMap = <K, V> (initial?: Map<K, V>) => {
         put:        (key: K, value: V)  => state.set(new Map(state.get()).set(key, value)),
         remove:     (key: K)            => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains:   (key: K)            => state.get().has(key),
-        size:       ()                  => state.get().size
+        size:       ()                  => state.get().size,
+        clear:      ()                  => state.set(new Map()),
+        isEmpty:    ()                  => state.get().size == 0,
     } as MapState<K, V>;
 }
 
