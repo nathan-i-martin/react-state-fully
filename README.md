@@ -1,4 +1,4 @@
-# react-state-fully ![npm](https://badgen.net/npm/v/react-state-fully)
+# react-state-fully [![npm](https://badgen.net/npm/v/react-state-fully)](https://www.npmjs.com/package/react-state-fully)
 Use fully encapsulated state variables in your React code!
 
 ## Installation

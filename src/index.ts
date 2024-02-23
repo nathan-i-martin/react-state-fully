@@ -132,6 +132,8 @@ export type BooleanState = {
     set:    (value: boolean)    => void,
     toggle: ()                  => void,
     equals: (value: boolean)    => boolean,
+    true:   ()                  => void,
+    false:  ()                  => void,
 }
 const useBoolean = (initial?: boolean) => {
     const state = useGeneric(initial ?? false);
