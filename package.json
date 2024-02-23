@@ -1,7 +1,7 @@
 {
   "name": "react-state-fully",
-  "version": "1.6.0",
-  "description": "Easily add media breakpoints to your react project",
+  "version": "1.7.0",
+  "description": "Fully encapsulated state management for specific state types",
   "private": false,
   "author": "Nathan Martin",
   "license": "MIT",

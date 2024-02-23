@@ -1,5 +1,5 @@
 # react-state-fully [![npm](https://badgen.net/npm/v/react-state-fully)](https://www.npmjs.com/package/react-state-fully)
-Use fully encapsulated state variables in your React code!
+Fully encapsulated state management for specific state types.
 
 ## Installation
 ```
@@ -7,7 +7,7 @@ npm i react-state-fully
 ```
 
 ## Introduction
-React is a powerful, component-based, tool that streamlines the process of developing clean readable website code! And through the use of [React Hooks][1], developers can easily add and create additional functionalities which aren't already in React! react-state-fully encapsulates the unnecessary details of setting and updating state away so you can make typical Javascript calls to your data types without having to worry about updating your state properly.
+React is a powerful, component-based, tool that streamlines the process of developing clean readable website code! And through the use of React Hooks, developers can easily add and create additional functionalities which aren't already in React! react-state-fully encapsulates the unnecessary details of setting and updating state away so you can make typical Javascript calls to your data types without having to worry about updating your state properly.
 
 ## Getting Started
 To get started, install react-state-fully in your project.

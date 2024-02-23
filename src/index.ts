@@ -1,5 +1,50 @@
 import { useState } from "react";
 
+export class Optional<T> {
+    private value?: T;
+
+    constructor(value?: T) {
+        this.value = value;
+    }
+
+    public orElseGet = (resolver: () => T) => {
+        if(this.exists()) return this.value;
+        return resolver();
+    }
+
+    public orElseNull = () => {
+        if(this.exists()) return this.value;
+        return null;
+    }
+
+    public orElseUndefined = () => {
+        if(this.exists()) return this.value;
+        return undefined;
+    }
+
+    public orElseThrow = (resolver?: () => Error) => {
+        if(this.exists()) return this.value;
+        if(resolver) throw resolver();
+        throw new Error();
+    }
+
+    public exists = () => {
+        return this.value != undefined;
+    }
+
+    public equals = (other: Optional<T>) => {
+        return other.orElseUndefined() === this.orElseUndefined();
+    }
+
+    public static empty = () => {
+        return new Optional();
+    }
+
+    public static from = (value: any) => {
+        return new Optional(value);
+    }
+}
+
 type GenericState<T> = {
     get:    () => T,
     set:    (value: T) => void,
@@ -14,9 +59,23 @@ const useGeneric = <T> (initial: T) => {
         equals: (value: T) => value === state,
     } as GenericState<T>;
 }
+const useOptionalGeneric = <T> (initial: Optional<T> | T | undefined) => {
+    const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
+
+    return {
+        get:                ()                                      => state,
+        orElseGet:          (resolver: () => T)                     => state.orElseGet(resolver),
+        orElseNull:         ()                                      => state.orElseNull(),
+        orElseUndefined:    ()                                      => state.orElseUndefined(),
+        orElseThrow:        (resolver?: () => Error)                => state.orElseThrow(resolver),
+        exists:             ()                                      => state.exists(),
+        set:                (value: Optional<T> | T | undefined)    => setState(value instanceof Optional ? value : new Optional(value)),
+        equals:             (value: Optional<T>)                    => state.equals(value),
+    } as GenericState<T> | Optional<T>;
+}
 
 export type ArrayState<V> = {
-    get:            ()                          => V,
+    get:            ()                          => V[],
     set:            (array: V[])                => void,
     getValue:       (index: number)             => V | undefined,
     getFirstValue:  ()                          => V | undefined,
@@ -59,7 +118,7 @@ const useArray = <V> (initial?: V[]) => {
 }
 
 export type SetState<V> = {
-    get:        ()              => V,
+    get:        ()              => Set<V>,
     set:        (set: Set<V>)   => void,
     add:        (item: V)       => void,
     remove:     (item: V)       => void,
@@ -90,7 +149,8 @@ const useSet = <V> (initial?: Set<V>) => {
 }
 
 export type MapState<V> = {
-    get:        ()                      => V,
+    get:        ()                      => Map<string,V>,
+    getValue:   (key: string)           => V | undefined,
     set:        (map: Map<string,V>)    => void,
     put:        (key: string, value: V) => void,
     remove:     (key: string)           => void,
@@ -107,6 +167,7 @@ const useMap = <V> (initial?: Map<string, V>) => {
 
     return {
         get:        ()                          => state.get(),
+        getValue:   (key: string)               => state.get().get(key),
         set:        (map: Map<string,V>)        => state.set(map),
         put:        (key: string, value: V)     => state.set(new Map(state.get()).set(key, value)),
         remove:     (key: string)               => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
@@ -201,10 +262,13 @@ const useString = (initial?: string) => {
 }*/
 
 export const State = {
+    useGeneric,
+    useOptionalGeneric,
+
     useArray,
     useSet,
-    useGeneric,
     useMap,
+
     useNumber,
     useString,
     useBoolean
