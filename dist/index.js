@@ -1,11 +1,64 @@
 import { useState } from 'react';
 
+class Optional {
+    value;
+    constructor(value) {
+        this.value = value;
+    }
+    orElseGet = (resolver) => {
+        if (this.exists())
+            return this.value;
+        return resolver();
+    };
+    orElseNull = () => {
+        if (this.exists())
+            return this.value;
+        return null;
+    };
+    orElseUndefined = () => {
+        if (this.exists())
+            return this.value;
+        return undefined;
+    };
+    orElseThrow = (resolver) => {
+        if (this.exists())
+            return this.value;
+        if (resolver)
+            throw resolver();
+        throw new Error();
+    };
+    exists = () => {
+        return this.value != undefined;
+    };
+    equals = (other) => {
+        return other.orElseUndefined() === this.orElseUndefined();
+    };
+    static empty = () => {
+        return new Optional();
+    };
+    static from = (value) => {
+        return new Optional(value);
+    };
+}
 const useGeneric = (initial) => {
     const [state, setState] = useState(initial);
     return {
         get: () => state,
         set: (value) => setState(value),
         equals: (value) => value === state,
+    };
+};
+const useOptionalGeneric = (initial) => {
+    const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
+    return {
+        get: () => state,
+        orElseGet: (resolver) => state.orElseGet(resolver),
+        orElseNull: () => state.orElseNull(),
+        orElseUndefined: () => state.orElseUndefined(),
+        orElseThrow: (resolver) => state.orElseThrow(resolver),
+        exists: () => state.exists(),
+        set: (value) => setState(value instanceof Optional ? value : new Optional(value)),
+        equals: (value) => state.equals(value),
     };
 };
 const useArray = (initial) => {
@@ -48,6 +101,7 @@ const useMap = (initial) => {
     const state = useGeneric(initial ?? new Map());
     return {
         get: () => state.get(),
+        getValue: (key) => state.get().get(key),
         set: (map) => state.set(map),
         put: (key, value) => state.set(new Map(state.get()).set(key, value)),
         remove: (key) => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
@@ -104,14 +158,15 @@ const useString = (initial) => {
     exists: () => boolean
 }*/
 const State = {
+    useGeneric,
+    useOptionalGeneric,
     useArray,
     useSet,
-    useGeneric,
     useMap,
     useNumber,
     useString,
     useBoolean
 };
 
-export { State };
+export { Optional, State };
 //# sourceMappingURL=index.js.map

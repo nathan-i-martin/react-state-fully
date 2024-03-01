@@ -1,10 +1,22 @@
+export declare class Optional<T> {
+    private value?;
+    constructor(value?: T);
+    orElseGet: (resolver: () => T) => T | undefined;
+    orElseNull: () => T | null | undefined;
+    orElseUndefined: () => T | undefined;
+    orElseThrow: (resolver?: () => Error) => T | undefined;
+    exists: () => boolean;
+    equals: (other: Optional<T>) => boolean;
+    static empty: () => Optional<unknown>;
+    static from: (value: any) => Optional<any>;
+}
 type GenericState<T> = {
     get: () => T;
     set: (value: T) => void;
     equals: (value: T) => boolean;
 };
 export type ArrayState<V> = {
-    get: () => V;
+    get: () => V[];
     set: (array: V[]) => void;
     getValue: (index: number) => V | undefined;
     getFirstValue: () => V | undefined;
@@ -22,7 +34,7 @@ export type ArrayState<V> = {
     forEach: (callback: (value: V, index: number, array: V[]) => void, thisArg?: any) => void;
 };
 export type SetState<V> = {
-    get: () => V;
+    get: () => Set<V>;
     set: (set: Set<V>) => void;
     add: (item: V) => void;
     remove: (item: V) => void;
@@ -34,7 +46,8 @@ export type SetState<V> = {
     forEach: (callback: (value: V, value2: V, set: Set<V>) => void, thisArg?: any) => void;
 };
 export type MapState<V> = {
-    get: () => V;
+    get: () => Map<string, V>;
+    getValue: (key: string) => V | undefined;
     set: (map: Map<string, V>) => void;
     put: (key: string, value: V) => void;
     remove: (key: string) => void;
@@ -75,9 +88,10 @@ export type StringState = {
     equals: (value: string) => boolean;
 };
 export declare const State: {
+    useGeneric: <T>(initial: T) => GenericState<T>;
+    useOptionalGeneric: <T_1>(initial: T_1 | Optional<T_1> | undefined) => Optional<T_1> | GenericState<T_1>;
     useArray: <V>(initial?: V[] | undefined) => ArrayState<V>;
     useSet: <V_1>(initial?: Set<V_1> | undefined) => SetState<V_1>;
-    useGeneric: <T>(initial: T) => GenericState<T>;
     useMap: <V_2>(initial?: Map<string, V_2> | undefined) => MapState<V_2>;
     useNumber: (initial?: number) => NumberState;
     useString: (initial?: string) => StringState;
