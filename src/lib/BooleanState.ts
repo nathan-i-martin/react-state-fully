@@ -11,8 +11,8 @@ export const useBoolean = (initial?: boolean) => {
     const state = useGeneric(initial ?? false);
 
     return {
-        get:    state.get(),
-        set:    (value: boolean)    => state.set(value),
+        get:    state.get,
+        set:    state.set,
         toggle: ()                  => state.set(!state.get()),
         equals: (value: boolean)    => state.equals(value),
         true:   ()                  => state.set(true),

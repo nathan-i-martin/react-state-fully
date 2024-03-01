@@ -15,8 +15,8 @@ export const useNumber = (initial?: number) => {
     const state = useGeneric(initial ?? 0);
 
     return {
-        get:        state.get(),
-        set:        (value: number) => state.set(value),
+        get:        state.get,
+        set:        state.set,
         add:        (value: number) => state.set(state.get() + value),
         subtract:   (value: number) => state.set(state.get() - value),
         multiply:   (value: number) => state.set(state.get() * value),

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export interface StateHandler<T> {
-    get: T;
+    get: ()=>T;
     set: (value: T)=>void;
 }
 

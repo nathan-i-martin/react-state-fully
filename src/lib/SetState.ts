@@ -1,8 +1,7 @@
 import { useGeneric } from "./GenericState.js";
+import { StateHandler } from "./StateHandler.js";
 
-export type SetState<V> = {
-    get:        ()              => Set<V>,
-    set:        (set: Set<V>)   => void,
+export type SetState<V> = StateHandler<Set<V>> & {
     add:        (item: V)       => void,
     remove:     (item: V)       => void,
     contains:   (item: V)       => boolean,
@@ -17,8 +16,8 @@ export const useSet = <V> (initial?: Set<V>) => {
     const state = useGeneric(initial ?? new Set<V>());
 
     return {
-        get:        ()              => state.get(),
-        set:        (set: Set<V>)   => state.set(set),
+        get:        state.get,
+        set:        state.set,
         add:        (item: V)       => state.set(new Set([...state.get(), item])),
         remove:     (item: V)       => { const newHashSet = new Set(state.get()); newHashSet.delete(item); state.set(newHashSet); },
         contains:   (item: V)       => state.get().has(item),

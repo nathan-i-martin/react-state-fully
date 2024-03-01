@@ -1,100 +1,19 @@
-export declare class Optional<T> {
-    private value?;
-    constructor(value?: T);
-    orElseGet: (resolver: () => T) => T | undefined;
-    orElseNull: () => T | null | undefined;
-    orElseUndefined: () => T | undefined;
-    orElseThrow: (resolver?: () => Error) => T | undefined;
-    exists: () => boolean;
-    equals: (other: Optional<T>) => boolean;
-    static empty: () => Optional<unknown>;
-    static from: (value: any) => Optional<any>;
-}
-type GenericState<T> = {
-    get: () => T;
-    set: (value: T) => void;
-    equals: (value: T) => boolean;
-};
-export type ArrayState<V> = {
-    get: () => V[];
-    set: (array: V[]) => void;
-    getValue: (index: number) => V | undefined;
-    getFirstValue: () => V | undefined;
-    getLastValue: () => V | undefined;
-    push: (item: V) => void;
-    pop: () => void;
-    add: (item: V) => void;
-    put: (index: number, value: V) => void;
-    remove: (index: number) => void;
-    contains: (item: V) => boolean;
-    size: () => number;
-    isEmpty: () => boolean;
-    clear: () => void;
-    map: (callback: (value: V, index: number, array: V[]) => any, thisArg?: any) => any[];
-    forEach: (callback: (value: V, index: number, array: V[]) => void, thisArg?: any) => void;
-};
-export type SetState<V> = {
-    get: () => Set<V>;
-    set: (set: Set<V>) => void;
-    add: (item: V) => void;
-    remove: (item: V) => void;
-    contains: (item: V) => boolean;
-    size: () => number;
-    isEmpty: () => boolean;
-    clear: () => void;
-    map: (callback: (value: V, index: number, array: V[]) => any, thisArg?: any) => any[];
-    forEach: (callback: (value: V, value2: V, set: Set<V>) => void, thisArg?: any) => void;
-};
-export type MapState<V> = {
-    get: () => Map<string, V>;
-    getValue: (key: string) => V | undefined;
-    set: (map: Map<string, V>) => void;
-    put: (key: string, value: V) => void;
-    remove: (key: string) => void;
-    contains: (key: string) => boolean;
-    size: () => number;
-    isEmpty: () => boolean;
-    clear: () => void;
-    map: (callback: (value: [string, any], index: number, array: [string, any][]) => any, thisArg?: any) => any[];
-    forEach: (callback: (value: [string, any], index: number, array: [string, any][]) => void, thisArg?: any) => void;
-};
-export type NumberState = {
-    get: () => number;
-    set: (value: number) => void;
-    add: (value: number) => void;
-    subtract: (value: number) => void;
-    multiply: (value: number) => void;
-    divide: (value: number) => void;
-    mod: (value: number) => void;
-    increment: () => void;
-    decrement: () => void;
-    equals: (value: number) => boolean;
-};
-export type BooleanState = {
-    get: () => boolean;
-    set: (value: boolean) => void;
-    toggle: () => void;
-    equals: (value: boolean) => boolean;
-    true: () => void;
-    false: () => void;
-};
-export type StringState = {
-    get: () => string;
-    set: (value: string) => void;
-    concat: (value: string) => void;
-    append: (value: string) => void;
-    prepend: (value: string) => void;
-    size: () => number;
-    equals: (value: string) => boolean;
-};
+import { ArrayState } from "./lib/ArrayState.js";
+import { BooleanState } from "./lib/BooleanState.js";
+import { GenericState } from "./lib/GenericState.js";
+import { MapState } from "./lib/MapState.js";
+import { NumberState } from "./lib/NumberState.js";
+import { Optional } from "./lib/OptionalState.js";
+import { SetState } from "./lib/SetState.js";
+import { StringState } from "./lib/StringState.js";
 export declare const State: {
     useGeneric: <T>(initial: T) => GenericState<T>;
-    useOptionalGeneric: <T_1>(initial: T_1 | Optional<T_1> | undefined) => Optional<T_1> | GenericState<T_1>;
+    useOptional: <T_1 extends import("./lib/StateHandler.js").StateHandler<any>>(initial: T_1 | Optional<T_1> | undefined) => Optional<T_1> | import("./lib/StateHandler.js").StateHandler<T_1>;
     useArray: <V>(initial?: V[] | undefined) => ArrayState<V>;
     useSet: <V_1>(initial?: Set<V_1> | undefined) => SetState<V_1>;
     useMap: <V_2>(initial?: Map<string, V_2> | undefined) => MapState<V_2>;
-    useNumber: (initial?: number) => NumberState;
-    useString: (initial?: string) => StringState;
-    useBoolean: (initial?: boolean) => BooleanState;
+    useNumber: (initial?: number | undefined) => NumberState;
+    useString: (initial?: string | undefined) => StringState;
+    useBoolean: (initial?: boolean | undefined) => BooleanState;
 };
-export {};
+export { BooleanState, GenericState, NumberState, StringState, ArrayState, SetState, MapState, Optional, };

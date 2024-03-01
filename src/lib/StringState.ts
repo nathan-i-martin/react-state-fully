@@ -30,8 +30,8 @@ export const useString = (initial?: string) => {
     const state = useGeneric(initial ?? "");
 
     return {
-        get:        state.get(),
-        set:        (value: string) => state.set(value),
+        get:        state.get,
+        set:        state.set,
         concat:     (value: string) => state.set(state.get() + value),
         append:     (value: string) => state.set(state.get() + value),
         prepend:    (value: string) => state.set(value + state.get()),

@@ -1,8 +1,7 @@
 import { useGeneric } from "./GenericState.js";
+import { StateHandler } from "./StateHandler.js";
 
-export type ArrayState<V> = {
-    get:            ()                          => V[],
-    set:            (array: V[])                => void,
+export type ArrayState<V> = StateHandler<V[]> & {
     getValue:       (index: number)             => V | undefined,
     getFirstValue:  ()                          => V | undefined,
     getLastValue:   ()                          => V | undefined,
@@ -44,8 +43,8 @@ export const useArray = <V> (initial?: V[]) => {
     const state = useGeneric(initial ?? []);
 
     return {
-        get:            ()                          => state.get(),
-        set:            (array: V[])                => state.set(array),
+        get:            state.get,
+        set:            state.set,
         getValue:       (index: number)             => state.get()[index],
         getFirstValue:  ()                          => state.get()[0],
         getLastValue:   ()                          => state.get()[state.get().length - 1],

@@ -1,9 +1,8 @@
 import { useGeneric } from "./GenericState.js";
+import { StateHandler } from "./StateHandler.js";
 
-export type MapState<V> = {
-    get:        ()                      => Map<string,V>,
+export type MapState<V> = StateHandler<Map<string, V>> & {
     getValue:   (key: string)           => V | undefined,
-    set:        (map: Map<string,V>)    => void,
     put:        (key: string, value: V) => void,
     remove:     (key: string)           => void,
     contains:   (key: string)           => boolean,
@@ -18,9 +17,9 @@ export const useMap = <V> (initial?: Map<string, V>) => {
     const state = useGeneric(initial ?? new Map<string, V>());
 
     return {
-        get:        ()                          => state.get(),
+        get:        state.get,
+        set:        state.set,
         getValue:   (key: string)               => state.get().get(key),
-        set:        (map: Map<string,V>)        => state.set(map),
         put:        (key: string, value: V)     => state.set(new Map(state.get()).set(key, value)),
         remove:     (key: string)               => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains:   (key: string)               => state.get().has(key),
