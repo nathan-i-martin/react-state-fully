@@ -17,8 +17,8 @@ const useGeneric = (initial) => {
 const useArray = (initial) => {
     const state = useGeneric(initial ?? []);
     return {
-        get: () => state.get(),
-        set: (array) => state.set(array),
+        get: state.get,
+        set: state.set,
         getValue: (index) => state.get()[index],
         getFirstValue: () => state.get()[0],
         getLastValue: () => state.get()[state.get().length - 1],
@@ -58,8 +58,8 @@ const useArray = (initial) => {
 const useBoolean = (initial) => {
     const state = useGeneric(initial ?? false);
     return {
-        get: state.get(),
-        set: (value) => state.set(value),
+        get: state.get,
+        set: state.set,
         toggle: () => state.set(!state.get()),
         equals: (value) => state.equals(value),
         true: () => state.set(true),
@@ -70,9 +70,9 @@ const useBoolean = (initial) => {
 const useMap = (initial) => {
     const state = useGeneric(initial ?? new Map());
     return {
-        get: () => state.get(),
+        get: state.get,
+        set: state.set,
         getValue: (key) => state.get().get(key),
-        set: (map) => state.set(map),
         put: (key, value) => state.set(new Map(state.get()).set(key, value)),
         remove: (key) => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains: (key) => state.get().has(key),
@@ -87,8 +87,8 @@ const useMap = (initial) => {
 const useNumber = (initial) => {
     const state = useGeneric(initial ?? 0);
     return {
-        get: state.get(),
-        set: (value) => state.set(value),
+        get: state.get,
+        set: state.set,
         add: (value) => state.set(state.get() + value),
         subtract: (value) => state.set(state.get() - value),
         multiply: (value) => state.set(state.get() * value),
@@ -157,8 +157,8 @@ const useOptional = (initial) => {
 const useSet = (initial) => {
     const state = useGeneric(initial ?? new Set());
     return {
-        get: () => state.get(),
-        set: (set) => state.set(set),
+        get: state.get,
+        set: state.set,
         add: (item) => state.set(new Set([...state.get(), item])),
         remove: (item) => { const newHashSet = new Set(state.get()); newHashSet.delete(item); state.set(newHashSet); },
         contains: (item) => state.get().has(item),
@@ -173,8 +173,8 @@ const useSet = (initial) => {
 const useString = (initial) => {
     const state = useGeneric(initial ?? "");
     return {
-        get: state.get(),
-        set: (value) => state.set(value),
+        get: state.get,
+        set: state.set,
         concat: (value) => state.set(state.get() + value),
         append: (value) => state.set(state.get() + value),
         prepend: (value) => state.set(value + state.get()),
