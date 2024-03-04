@@ -52,6 +52,7 @@ const useArray = (initial) => {
         shift: () => { const a = [...state.get()]; const o = a.shift(); state.set(a); return o; },
         unshift: (...items) => { const a = [...state.get()]; const o = a.unshift(...items); state.set(a); return o; },
         splice: (start, deleteCount) => { const a = [...state.get()]; const o = a.splice(start, deleteCount); state.set(a); return o; },
+        removeDuplicates: () => state.set([...new Set(state.get())]),
     };
 };
 
@@ -75,12 +76,34 @@ const useMap = (initial) => {
         getValue: (key) => state.get().get(key),
         put: (key, value) => state.set(new Map(state.get()).set(key, value)),
         remove: (key) => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
+        delete: (key) => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
         contains: (key) => state.get().has(key),
+        has: (key) => state.get().has(key),
         size: () => state.get().size,
         clear: () => state.set(new Map()),
         isEmpty: () => state.get().size == 0,
-        map: (callback, thisArg) => Object.entries(state.get()).map(callback, thisArg),
-        forEach: (callback, thisArg) => Object.entries(state.get()).forEach(callback, thisArg),
+        map: (callback, thisArg) => {
+            const map = state.get();
+            const result = [];
+            let index = 0;
+            for (const entry of map.entries()) {
+                const cbResult = callback.call(thisArg, entry, index, Array.from(map.entries()));
+                result.push(cbResult);
+                index++;
+            }
+            return result;
+        },
+        forEach: (callback, thisArg) => {
+            const map = state.get();
+            let index = 0;
+            for (const entry of map.entries()) {
+                callback.call(thisArg, entry, index, Array.from(map.entries()));
+                index++;
+            }
+        },
+        entries: () => state.get().entries(),
+        keys: () => state.get().keys(),
+        values: () => state.get().values(),
     };
 };
 
@@ -102,24 +125,46 @@ const useNumber = (initial) => {
 
 class Optional {
     value;
+    /**
+     * Constructs an Optional object that may or may not contain a non-null value.
+     * @param value The value to be contained, if any.
+     */
     constructor(value) {
         this.value = value;
     }
+    /**
+     * Returns the value if present, otherwise returns the result produced by the resolver function.
+     * @param resolver A function that produces a value to be returned if the Optional is empty.
+     * @returns The value if present, otherwise the result of the resolver function.
+     */
     orElseGet = (resolver) => {
         if (this.exists())
             return this.value;
         return resolver();
     };
+    /**
+     * Returns the value if present, otherwise returns null.
+     * @returns The value if present, otherwise null.
+     */
     orElseNull = () => {
         if (this.exists())
             return this.value;
         return null;
     };
+    /**
+     * Returns the value if present, otherwise returns undefined.
+     * @returns The value if present, otherwise undefined.
+     */
     orElseUndefined = () => {
         if (this.exists())
             return this.value;
         return undefined;
     };
+    /**
+     * Returns the contained value if present, otherwise throws an error produced by the resolver function or a generic error if no resolver is provided.
+     * @param resolver An optional function that produces an error to be thrown if the Optional is empty.
+     * @throws Error produced by the resolver or a generic error if the Optional is empty.
+     */
     orElseThrow = (resolver) => {
         if (this.exists())
             return this.value;
@@ -127,15 +172,33 @@ class Optional {
             throw resolver();
         throw new Error();
     };
+    /**
+     * Checks whether the Optional contains a value.
+     * @returns True if there is a value present, otherwise false.
+     */
     exists = () => {
         return this.value != undefined;
     };
+    /**
+     * Compares the contained value with another Optional's value for equality.
+     * @param other Another Optional object to compare with.
+     * @returns True if both Optionals contain equal values or are both empty, otherwise false.
+     */
     equals = (other) => {
         return other.orElseUndefined() === this.orElseUndefined();
     };
+    /**
+     * Creates an empty Optional instance.
+     * @returns An empty Optional object.
+     */
     static empty = () => {
         return new Optional();
     };
+    /**
+     * Creates an Optional from a given value.
+     * @param value The value to create an Optional for.
+     * @returns An Optional containing the given value.
+     */
     static from = (value) => {
         return new Optional(value);
     };
@@ -160,13 +223,19 @@ const useSet = (initial) => {
         get: state.get,
         set: state.set,
         add: (item) => state.set(new Set([...state.get(), item])),
-        remove: (item) => { const newHashSet = new Set(state.get()); newHashSet.delete(item); state.set(newHashSet); },
+        remove: (item) => { const a = new Set(state.get()); const o = a.delete(item); state.set(a); return o; },
+        delete: (item) => { const a = new Set(state.get()); const o = a.delete(item); state.set(a); return o; },
         contains: (item) => state.get().has(item),
+        has: (item) => state.get().has(item),
         size: () => state.get().size,
         clear: () => state.set(new Set()),
         isEmpty: () => state.get().size == 0,
         map: (callback, thisArg) => Array.from(state.get()).map(callback, thisArg),
         forEach: (callback, thisArg) => state.get().forEach(callback, thisArg),
+        entries: () => state.get().entries(),
+        keys: () => state.get().keys(),
+        values: () => state.get().values(),
+        toArray: () => [...state.get()],
     };
 };
 

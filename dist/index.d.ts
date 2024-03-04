@@ -11,7 +11,7 @@ export declare const State: {
     useOptional: <T_1 extends import("./lib/StateHandler.js").StateHandler<any>>(initial: T_1 | Optional<T_1> | undefined) => Optional<T_1> | import("./lib/StateHandler.js").StateHandler<T_1>;
     useArray: <V>(initial?: V[] | undefined) => ArrayState<V>;
     useSet: <V_1>(initial?: Set<V_1> | undefined) => SetState<V_1>;
-    useMap: <V_2>(initial?: Map<string, V_2> | undefined) => MapState<V_2>;
+    useMap: <K, V_2>(initial?: Map<K, V_2> | undefined) => MapState<K, V_2>;
     useNumber: (initial?: number | undefined) => NumberState;
     useString: (initial?: string | undefined) => StringState;
     useBoolean: (initial?: boolean | undefined) => BooleanState;

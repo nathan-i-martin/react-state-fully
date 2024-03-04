@@ -72,21 +72,17 @@ export class Optional<T> {
      * Creates an empty Optional instance.
      * @returns An empty Optional object.
      */
-    public static empty = () => {
-        return new Optional();
-    }
+    public static empty = () => new Optional<any>();
 
     /**
      * Creates an Optional from a given value.
      * @param value The value to create an Optional for.
      * @returns An Optional containing the given value.
      */
-    public static from = (value: any) => {
-        return new Optional(value);
-    }
+    public static from = <T> (value: T) => new Optional(value);
 }
 
-export const useOptional = <T extends StateHandler<any>> (initial: Optional<T> | T | undefined) => {
+export const useOptional = <T> (initial: Optional<T> | T | undefined) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
 
     return {
