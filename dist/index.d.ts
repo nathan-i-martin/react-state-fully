@@ -8,7 +8,7 @@ import { SetState } from "./lib/SetState.js";
 import { StringState } from "./lib/StringState.js";
 export declare const State: {
     useGeneric: <T>(initial: T) => GenericState<T>;
-    useOptional: <T_1>(initial: T_1 | Optional<T_1> | undefined) => import("./lib/StateHandler.js").StateHandler<T_1> & Optional<T_1>;
+    useOptional: <T_1>(initial?: T_1 | Optional<T_1> | undefined) => import("./lib/StateHandler.js").StateHandler<T_1> & Optional<T_1>;
     useArray: <V>(initial?: V[] | undefined) => ArrayState<V>;
     useSet: <V_1>(initial?: Set<V_1> | undefined) => SetState<V_1>;
     useMap: <K, V_2>(initial?: Map<K, V_2> | undefined) => MapState<K, V_2>;

@@ -20,9 +20,9 @@ export type SetState<V> = StateHandler<Set<V>> & {
     clear:      ()          => void,
 
     /** Applies a function to each item in the set and returns an array of the results. */
-    map:        (callback: (value: V, index: number, array: V[]) => any, thisArg?: any) => any[],
+    map:        (callback: (value?: V, index?: number, array?: V[]) => any, thisArg?: any) => any[],
     /** Executes a provided function once for each set element. */
-    forEach:    (callback: (value: V, value2: V, set: Set<V>) => void,   thisArg?: any) => void,
+    forEach:    (callback: (value?: V, value2?: V, set?: Set<V>) => void,   thisArg?: any) => void,
 
     /** Returns an iterator that contains an array of [value, value] for each element in the set. */
     entries:    ()  => IterableIterator<[V, V]>,
@@ -49,8 +49,8 @@ export const useSet = <V> (initial?: Set<V>) => {
         clear:      ()          => state.set(new Set<V>()),
         isEmpty:    ()          => state.get().size == 0,
 
-        map:        (callback: (value: V, index: number, array: V[]) => any,  thisArg?: any) => Array.from(state.get()).map(callback, thisArg),
-        forEach:    (callback: (value: V, value2: V,    set: Set<V>) => void, thisArg?: any) => state.get().forEach(callback, thisArg),
+        map:        (callback: (value?: V, index?: number, array?: V[]) => any,  thisArg?: any) => Array.from(state.get()).map(callback, thisArg),
+        forEach:    (callback: (value?: V, value2?: V,    set?: Set<V>) => void, thisArg?: any) => state.get().forEach(callback, thisArg),
 
         entries:    ()  => state.get().entries(),
         keys:       ()  => state.get().keys(),

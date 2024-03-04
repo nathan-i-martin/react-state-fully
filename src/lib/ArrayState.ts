@@ -24,21 +24,21 @@ export type ArrayState<V> = StateHandler<V[]> & {
     clear:          ()                          => void,
 
     /** Creates a new array with the results of calling a provided function on every element in the calling array. */
-    map:            (callback: (value: V, index: number, array: V[]) => any,  thisArg?: any) => any[],
+    map:            (callback: (value?: V, index?: number, array?: V[]) => any,  thisArg?: any) => any[],
     /** Executes a provided function once for each array element. */
-    forEach:        (callback: (value: V, index: number, array: V[]) => void, thisArg?: any) => void,
+    forEach:        (callback: (value?: V, index?: number, array?: V[]) => void, thisArg?: any) => void,
     /** Creates a new array with all elements that pass the test implemented by the provided function. */
-    filter:         (predicate: (value: V, index: number, array: V[]) => value is V, thisArg?: any)             => V[],
+    filter:         (predicate: (value?: V, index?: number, array?: V[]) => value is V, thisArg?: any)             => V[],
     /** Filters the array by a predicate, modifies the original state with the filtered array, and returns the new array. */
-    mutateFilter:   (predicate: (value: V, index: number, array: V[]) => value is V, thisArg?: any)             => V[],
+    mutateFilter:   (predicate: (value?: V, index?: number, array?: V[]) => value is V, thisArg?: any)             => V[],
     /** Applies a function against an accumulator and each element in the array (from left to right) to reduce it to a single value. */
     reduce:         (callbackfn: (previousValue: V, currentValue: V, currentIndex: number, array: V[]) => V)    => V,
     /** Returns the value of the first element in the array that satisfies the provided testing function. Otherwise undefined is returned. */
-    find:           (predicate: (value: V, index: number, obj: V[]) => value is V, thisArg?: any)               => V | undefined,
+    find:           (predicate: (value?: V, index?: number, array?: V[]) => value is V, thisArg?: any)               => V | undefined,
     /** Tests whether at least one element in the array passes the test implemented by the provided function. */
-    some:           (predicate: (value: V, index: number, array: V[]) => unknown, thisArg?: any)                => boolean,
+    some:           (predicate: (value?: V, index?: number, array?: V[]) => unknown, thisArg?: any)                => boolean,
     /** Tests whether all elements in the array pass the test implemented by the provided function. */
-    every:          (predicate: (value: V, index: number, array: V[]) => unknown, thisArg?: any)                => boolean,
+    every:          (predicate: (value?: V, index?: number, array?: V[]) => unknown, thisArg?: any)                => boolean,
     
     /** Retrieves the value at the specified index in the array using the at() method. Returns undefined if the index is out of bounds. */
     at:             (index: number)                         => V | undefined,
@@ -92,14 +92,14 @@ export const useArray = <V> (initial?: V[]) => {
         clear:          ()                          => state.set([]),
         isEmpty:        ()                          => state.get().length == 0,
 
-        map:            (callback: (value: V, index: number, array: V[]) => any,  thisArg?: any)                    => state.get().map(callback, thisArg),
-        forEach:        (callback: (value: V, index: number, array: V[]) => void, thisArg?: any)                    => state.get().forEach(callback, thisArg),
-        filter:         (predicate: (value: V, index: number, array: V[]) => value is V, thisArg?: any)             => state.get().filter(predicate, thisArg),
-        mutateFilter:   (predicate: (value: V, index: number, array: V[]) => value is V, thisArg?: any)             => { const o = state.get().filter(predicate, thisArg); state.set(o); return o; },
+        map:            (callback: (value?: V, index?: number, array?: V[]) => any,  thisArg?: any)                    => state.get().map(callback, thisArg),
+        forEach:        (callback: (value?: V, index?: number, array?: V[]) => void, thisArg?: any)                    => state.get().forEach(callback, thisArg),
+        filter:         (predicate: (value?: V, index?: number, array?: V[]) => value is V, thisArg?: any)             => state.get().filter(predicate, thisArg),
+        mutateFilter:   (predicate: (value?: V, index?: number, array?: V[]) => value is V, thisArg?: any)             => { const o = state.get().filter(predicate, thisArg); state.set(o); return o; },
         reduce:         (callbackfn: (previousValue: V, currentValue: V, currentIndex: number, array: V[]) => V)    => state.get().reduce(callbackfn),
-        find:           (predicate: (value: V, index: number, obj: V[]) => value is V, thisArg?: any)               => state.get().find(predicate, thisArg),
-        some:           (predicate: (value: V, index: number, array: V[]) => unknown, thisArg?: any)                => state.get().some(predicate, thisArg),
-        every:          (predicate: (value: V, index: number, array: V[]) => unknown, thisArg?: any)                => state.get().every(predicate, thisArg),
+        find:           (predicate: (value?: V, index?: number, array?: V[]) => value is V, thisArg?: any)               => state.get().find(predicate, thisArg),
+        some:           (predicate: (value?: V, index?: number, array?: V[]) => unknown, thisArg?: any)                => state.get().some(predicate, thisArg),
+        every:          (predicate: (value?: V, index?: number, array?: V[]) => unknown, thisArg?: any)                => state.get().every(predicate, thisArg),
 
         at:             (index: number)                         => state.get().at(index),
         join:           (separator?: string)                    => state.get().join(separator),
