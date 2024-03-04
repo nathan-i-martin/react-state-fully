@@ -18,9 +18,9 @@ export type MapState<K, V> = StateHandler<Map<K, V>> & {
     clear:      ()                 => void,
 
     /** Creates an array of values by running each element in the map through a callback function. */
-    map:        (callback: (value?: [K, V], index?: number, array?: [K, V][]) => any,  thisArg?: any) => any[],
+    map:        (callback: (value: [K, V], index: number, array: [K, V][]) => any,  thisArg?: any) => any[],
     /** Executes a provided function once for each map entry. */
-    forEach:    (callback: (value?: [K, V], index?: number, array?: [K, V][]) => void, thisArg?: any) => void,
+    forEach:    (callback: (value: [K, V], index: number, array: [K, V][]) => void, thisArg?: any) => void,
 
     /** Returns an iterable of key-value pairs for every entry in the map. */
     entries:    ()  => IterableIterator<[K, V]>,
@@ -45,7 +45,7 @@ export const useMap = <K, V> (initial?: Map<K, V>) => {
         clear:      ()                      => state.set(new Map()),
         isEmpty:    ()                      => state.get().size == 0,
 
-        map: (callback: (value?: [K, V], index?: number, array?: [K, V][]) => any, thisArg?: any) => {
+        map: (callback: (value: [K, V], index: number, array: [K, V][]) => any, thisArg?: any) => {
             const map = state.get();
             const result: any[] = [];
             let index = 0;
@@ -56,7 +56,7 @@ export const useMap = <K, V> (initial?: Map<K, V>) => {
             }
             return result;
         },
-        forEach: (callback: (value?: [K, V], index?: number, array?: [K, V][]) => void, thisArg?: any) => {
+        forEach: (callback: (value: [K, V], index: number, array: [K, V][]) => void, thisArg?: any) => {
             const map = state.get();
             let index = 0;
             for (const entry of map.entries()) {

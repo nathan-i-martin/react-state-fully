@@ -49,9 +49,11 @@ const useArray = (initial) => {
         copyWithin: (target, start, end) => { const a = [...state.get()]; const o = a.copyWithin(target, start, end); state.set(a); return o; },
         fill: (value, start, end) => { const a = [...state.get()]; const o = a.fill(value, start, end); state.set(a); return o; },
         reverse: () => { const a = [...state.get()]; const o = a.reverse(); state.set(a); return o; },
+        splice: (start, deleteCount) => { const a = [...state.get()]; const o = a.splice(start, deleteCount); state.set(a); return o; },
         shift: () => { const a = [...state.get()]; const o = a.shift(); state.set(a); return o; },
         unshift: (...items) => { const a = [...state.get()]; const o = a.unshift(...items); state.set(a); return o; },
-        splice: (start, deleteCount) => { const a = [...state.get()]; const o = a.splice(start, deleteCount); state.set(a); return o; },
+        append: (...items) => { const a = [...state.get()]; const o = a.push(...items); state.set(a); return o; },
+        prepend: (...items) => { const a = [...state.get()]; const o = a.unshift(...items); state.set(a); return o; },
         removeDuplicates: () => state.set([...new Set(state.get())]),
     };
 };
