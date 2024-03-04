@@ -82,11 +82,12 @@ export class Optional<T> {
     public static of = <T> (value: T) => new Optional(value);
 }
 
+type OptionalState<T> = StateHandler<T> & Optional<T>;
 export const useOptional = <T> (initial: Optional<T> | T | undefined) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
 
     return {
-        get:                state,
+        get:                () => state,
         set:                (value: Optional<T> | T | undefined)    => setState(value instanceof Optional ? value : new Optional(value)),
         orElseGet:          (resolver: () => T)                     => state.orElseGet(resolver),
         orElseNull:         ()                                      => state.orElseNull(),
@@ -94,5 +95,5 @@ export const useOptional = <T> (initial: Optional<T> | T | undefined) => {
         orElseThrow:        (resolver?: () => Error)                => state.orElseThrow(resolver),
         exists:             ()                                      => state.exists(),
         equals:             (value: Optional<T>)                    => state.equals(value),
-    } as StateHandler<T> | Optional<T>;
+    } as OptionalState<T>;
 }

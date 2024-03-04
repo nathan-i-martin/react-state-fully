@@ -197,7 +197,7 @@ class Optional {
      * @param value The value to create an Optional for.
      * @returns An Optional containing the given value.
      */
-    static from = (value) => new Optional(value);
+    static of = (value) => new Optional(value);
 }
 const useOptional = (initial) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
