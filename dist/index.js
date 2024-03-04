@@ -202,7 +202,7 @@ class Optional {
 const useOptional = (initial) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
     return {
-        get: state,
+        get: () => state,
         set: (value) => setState(value instanceof Optional ? value : new Optional(value)),
         orElseGet: (resolver) => state.orElseGet(resolver),
         orElseNull: () => state.orElseNull(),

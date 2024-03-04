@@ -83,7 +83,7 @@ export class Optional<T> {
 }
 
 type OptionalState<T> = StateHandler<T> & Optional<T>;
-export const useOptional = <T> (initial: Optional<T> | T | undefined) => {
+export const useOptional = <T> (initial?: Optional<T> | T) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
 
     return {
