@@ -79,7 +79,7 @@ export class Optional<T> {
      * @param value The value to create an Optional for.
      * @returns An Optional containing the given value.
      */
-    public static from = <T> (value: T) => new Optional(value);
+    public static of = <T> (value: T) => new Optional(value);
 }
 
 export const useOptional = <T> (initial: Optional<T> | T | undefined) => {

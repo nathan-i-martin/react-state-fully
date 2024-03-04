@@ -191,17 +191,13 @@ class Optional {
      * Creates an empty Optional instance.
      * @returns An empty Optional object.
      */
-    static empty = () => {
-        return new Optional();
-    };
+    static empty = () => new Optional();
     /**
      * Creates an Optional from a given value.
      * @param value The value to create an Optional for.
      * @returns An Optional containing the given value.
      */
-    static from = (value) => {
-        return new Optional(value);
-    };
+    static from = (value) => new Optional(value);
 }
 const useOptional = (initial) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
