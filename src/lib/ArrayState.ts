@@ -1,7 +1,6 @@
-import { useGeneric } from "./GenericState.js";
-import { StateHandler } from "./StateHandler.js";
+import { GenericState, useGeneric } from "./GenericState.js";
 
-export type ArrayState<V> = StateHandler<V[]> & {
+export type ArrayState<V> = GenericState<V[]> & {
     /** Retrieves the value at the specified index in the array. Returns undefined if the index is out of bounds. */
     getValue:       (index: number)             => V | undefined,
     /** Retrieves the first value in the array. Returns undefined if the array is empty. */

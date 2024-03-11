@@ -1,7 +1,6 @@
-import { useGeneric } from "./GenericState.js";
-import { StateHandler } from "./StateHandler.js";
+import { GenericState, useGeneric } from "./GenericState.js";
 
-export type NumberState = StateHandler<number> & {
+export type NumberState = GenericState<number> & {
     /** Adds the given value to the current state and updates the state with the new value. */
     add:        (value: number) => void,
     /** Subtracts the given value from the current state and updates the state with the new value. */
@@ -16,8 +15,6 @@ export type NumberState = StateHandler<number> & {
     increment:  ()              => void,
     /** Decrements the current state by 1 and updates the state with the new value. */
     decrement:  ()              => void,
-    /** Checks if the current state equals the given value. Returns true if equal, false otherwise. */
-    equals:     (value: number) => boolean,
 }
 export const useNumber = (initial?: number) => {
     const state = useGeneric(initial ?? 0);

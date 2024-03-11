@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StateHandler } from './StateHandler.js';
+import { GenericState } from './GenericState.js';
 
 export class Optional<T> {
     private value?: T;
@@ -82,18 +82,20 @@ export class Optional<T> {
     public static of = <T> (value: T) => new Optional(value);
 }
 
-type OptionalState<T> = StateHandler<T> & Optional<T>;
+type OptionalState<T> = GenericState<T> & Optional<T>;
 export const useOptional = <T> (initial?: Optional<T> | T) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
 
     return {
         get:                () => state,
-        set:                (value: Optional<T> | T | undefined)    => setState(value instanceof Optional ? value : new Optional(value)),
-        orElseGet:          (resolver: () => T)                     => state.orElseGet(resolver),
-        orElseNull:         ()                                      => state.orElseNull(),
-        orElseUndefined:    ()                                      => state.orElseUndefined(),
-        orElseThrow:        (resolver?: () => Error)                => state.orElseThrow(resolver),
-        exists:             ()                                      => state.exists(),
-        equals:             (value: Optional<T>)                    => state.equals(value),
+        set:                (value: Optional<T> | T | undefined)            => setState(value instanceof Optional ? value : new Optional(value)),
+        equals:             (value: Optional<T>)                            => state.equals(value),
+        compute:            (callback: (value: Optional<T>)=>Optional<T>)   => {setState(callback(state))},
+
+        orElseGet:          (resolver: () => T)                             => state.orElseGet(resolver),
+        orElseNull:         ()                                              => state.orElseNull(),
+        orElseUndefined:    ()                                              => state.orElseUndefined(),
+        orElseThrow:        (resolver?: () => Error)                        => state.orElseThrow(resolver),
+        exists:             ()                                              => state.exists(),
     } as OptionalState<T>;
 }

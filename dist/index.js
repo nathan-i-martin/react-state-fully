@@ -10,6 +10,7 @@ const useGeneric = (initial) => {
     return {
         get: state.get,
         set: state.set,
+        compute: (callback) => state.set(callback(state.get())),
         equals: (value) => value === state.get(),
     };
 };
@@ -19,6 +20,8 @@ const useArray = (initial) => {
     return {
         get: state.get,
         set: state.set,
+        compute: state.compute,
+        equals: state.equals,
         getValue: (index) => state.get()[index],
         getFirstValue: () => state.get()[0],
         getLastValue: () => state.get()[state.get().length - 1],
@@ -64,8 +67,9 @@ const useBoolean = (initial) => {
     return {
         get: state.get,
         set: state.set,
+        compute: state.compute,
+        equals: state.equals,
         toggle: () => state.set(!state.get()),
-        equals: (value) => state.equals(value),
         true: () => state.set(true),
         false: () => state.set(false),
     };
@@ -76,6 +80,8 @@ const useMap = (initial) => {
     return {
         get: state.get,
         set: state.set,
+        compute: state.compute,
+        equals: state.equals,
         getValue: (key) => state.get().get(key),
         put: (key, value) => state.set(new Map(state.get()).set(key, value)),
         remove: (key) => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
@@ -115,6 +121,8 @@ const useNumber = (initial) => {
     return {
         get: state.get,
         set: state.set,
+        compute: state.compute,
+        equals: state.equals,
         add: (value) => state.set(state.get() + value),
         subtract: (value) => state.set(state.get() - value),
         multiply: (value) => state.set(state.get() * value),
@@ -122,7 +130,6 @@ const useNumber = (initial) => {
         mod: (value) => state.set(state.get() % value),
         increment: () => state.set(state.get() + 1),
         decrement: () => state.set(state.get() - 1),
-        equals: (value) => state.equals(value),
     };
 };
 
@@ -207,12 +214,13 @@ const useOptional = (initial) => {
     return {
         get: () => state,
         set: (value) => setState(value instanceof Optional ? value : new Optional(value)),
+        equals: (value) => state.equals(value),
+        compute: (callback) => { setState(callback(state)); },
         orElseGet: (resolver) => state.orElseGet(resolver),
         orElseNull: () => state.orElseNull(),
         orElseUndefined: () => state.orElseUndefined(),
         orElseThrow: (resolver) => state.orElseThrow(resolver),
         exists: () => state.exists(),
-        equals: (value) => state.equals(value),
     };
 };
 
@@ -221,6 +229,8 @@ const useSet = (initial) => {
     return {
         get: state.get,
         set: state.set,
+        compute: state.compute,
+        equals: state.equals,
         add: (item) => state.set(new Set([...state.get(), item])),
         remove: (item) => { const a = new Set(state.get()); const o = a.delete(item); state.set(a); return o; },
         delete: (item) => { const a = new Set(state.get()); const o = a.delete(item); state.set(a); return o; },
@@ -243,12 +253,13 @@ const useString = (initial) => {
     return {
         get: state.get,
         set: state.set,
+        compute: state.compute,
+        equals: state.equals,
         concat: (value) => state.set(state.get() + value),
         append: (value) => state.set(state.get() + value),
         prepend: (value) => state.set(value + state.get()),
         size: () => state.get().length,
         length: () => state.get().length,
-        equals: (value) => state.equals(value),
         charAt: (index) => state.get().charAt(index),
         charCodeAt: (index) => state.get().charCodeAt(index),
         at: (index) => state.get().at(index),

@@ -1,7 +1,6 @@
-import { useGeneric } from "./GenericState.js";
-import { StateHandler } from "./StateHandler.js";
+import { GenericState, useGeneric } from "./GenericState.js";
 
-export type StringState = StateHandler<string> & {
+export type StringState = GenericState<string> & {
     /** Concatenates the given string value to the current string state and updates the state with the new value. */
     concat:     (value: string)     => void,
     /** Appends the given string value to the end of the current string state and updates the state with the new value. */
@@ -12,8 +11,6 @@ export type StringState = StateHandler<string> & {
     size:       ()                  => number,
     /** Returns the length of the current string state. */
     length:     ()                  => number,
-    /** Checks if the current string state equals the given string value. */
-    equals:     (value: string)     => boolean,
 
     /** Returns the character at the specified index from the current string state. */
     charAt:     (index: number) => string,

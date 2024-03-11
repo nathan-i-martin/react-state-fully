@@ -1,7 +1,6 @@
-import { useGeneric } from "./GenericState.js";
-import { StateHandler } from "./StateHandler.js";
+import { GenericState, useGeneric } from "./GenericState.js";
 
-export type MapState<K, V> = StateHandler<Map<K, V>> & {
+export type MapState<K, V> = GenericState<Map<K, V>> & {
     /** Retrieves the value associated with the specified key in the map. Returns undefined if the key does not exist. */
     getValue:   (key: K)           => V | undefined,
     /** Inserts or updates a key-value pair in the map and updates the state. */

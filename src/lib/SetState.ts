@@ -1,7 +1,6 @@
-import { useGeneric } from "./GenericState.js";
-import { StateHandler } from "./StateHandler.js";
+import { GenericState, useGeneric } from "./GenericState.js";
 
-export type SetState<V> = StateHandler<Set<V>> & {
+export type SetState<V> = GenericState<Set<V>> & {
     /** Adds an item to the set and updates the state with the new set. */
     add:        (item: V)   => void,
     /** Removes an item from the set if it exists and updates the state. Returns true if the item was successfully removed, false otherwise. */
