@@ -50,6 +50,7 @@ const useArray = (initial) => {
         fill: (value, start, end) => { const a = [...state.get()]; const o = a.fill(value, start, end); state.set(a); return o; },
         reverse: () => { const a = [...state.get()]; const o = a.reverse(); state.set(a); return o; },
         splice: (start, deleteCount) => { const a = [...state.get()]; const o = a.splice(start, deleteCount); state.set(a); return o; },
+        spliceInsert: (start, deleteCount, ...items) => { const a = [...state.get()]; const o = a.splice(start, deleteCount, ...items); state.set(a); return o; },
         shift: () => { const a = [...state.get()]; const o = a.shift(); state.set(a); return o; },
         unshift: (...items) => { const a = [...state.get()]; const o = a.unshift(...items); state.set(a); return o; },
         append: (...items) => { const a = [...state.get()]; const o = a.push(...items); state.set(a); return o; },

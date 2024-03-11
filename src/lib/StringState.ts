@@ -52,12 +52,14 @@ export const useString = (initial?: string) => {
     return {
         get:        state.get,
         set:        state.set,
+        compute:    state.compute,
+        equals:     state.equals,
+
         concat:     (value: string) => state.set(state.get() + value),
         append:     (value: string) => state.set(state.get() + value),
         prepend:    (value: string) => state.set(value + state.get()),
         size:       ()              => state.get().length,
         length:     ()              => state.get().length,
-        equals:     (value: string) => state.equals(value),
 
         charAt:     (index: number) => state.get().charAt(index),
         charCodeAt: (index: number) => state.get().charCodeAt(index),

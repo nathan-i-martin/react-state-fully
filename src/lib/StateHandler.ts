@@ -16,5 +16,6 @@ export interface StateHandler<T> {
 
 export const useStateHandler = <T> (initial: T) => {
     const [ get, set ] = useState(initial);
-    return { get: () => get, set };
+
+    return { get: () => get, set } as StateHandler<T>;
 }

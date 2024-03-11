@@ -25,6 +25,9 @@ export const useNumber = (initial?: number) => {
     return {
         get:        state.get,
         set:        state.set,
+        compute:    state.compute,
+        equals:     state.equals,
+
         add:        (value: number) => state.set(state.get() + value),
         subtract:   (value: number) => state.set(state.get() - value),
         multiply:   (value: number) => state.set(state.get() * value),
@@ -32,6 +35,5 @@ export const useNumber = (initial?: number) => {
         mod:        (value: number) => state.set(state.get() % value),
         increment:  ()              => state.set(state.get() + 1),
         decrement:  ()              => state.set(state.get() - 1),
-        equals:     (value: number) => state.equals(value),
     } as NumberState;
 }

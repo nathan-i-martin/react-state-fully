@@ -40,6 +40,9 @@ export const useSet = <V> (initial?: Set<V>) => {
     return {
         get:        state.get,
         set:        state.set,
+        compute:    state.compute,
+        equals:     state.equals,
+        
         add:        (item: V)   => state.set(new Set([...state.get(), item])),
         remove:     (item: V)   => { const a = new Set(state.get()); const o = a.delete(item); state.set(a); return o; },
         delete:     (item: V)   => { const a = new Set(state.get()); const o = a.delete(item); state.set(a); return o; },

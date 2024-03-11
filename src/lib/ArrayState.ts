@@ -34,11 +34,11 @@ export type ArrayState<V> = StateHandler<V[]> & {
     /** Applies a function against an accumulator and each element in the array (from left to right) to reduce it to a single value. */
     reduce:         (callbackfn: (previousValue: V, currentValue: V, currentIndex: number, array: V[]) => V)    => V,
     /** Returns the value of the first element in the array that satisfies the provided testing function. Otherwise undefined is returned. */
-    find:           (predicate: (value: V, index: number, obj: V[]) => value is V, thisArg?: any)               => V | undefined,
+    find:           (predicate: (value: V, index: number, obj: V[]) => boolean, thisArg?: any)               => V | undefined,
     /** Tests whether at least one element in the array passes the test implemented by the provided function. */
-    some:           (predicate: (value: V, index: number, array: V[]) => unknown, thisArg?: any)                => boolean,
+    some:           (predicate: (value: V, index: number, array: V[]) => boolean, thisArg?: any)                => boolean,
     /** Tests whether all elements in the array pass the test implemented by the provided function. */
-    every:          (predicate: (value: V, index: number, array: V[]) => unknown, thisArg?: any)                => boolean,
+    every:          (predicate: (value: V, index: number, array: V[]) => boolean, thisArg?: any)                => boolean,
     
     /** Retrieves the value at the specified index in the array using the at() method. Returns undefined if the index is out of bounds. */
     at:             (index: number)                         => V | undefined,
@@ -56,17 +56,19 @@ export type ArrayState<V> = StateHandler<V[]> & {
     slice:          (start?: number, end?: number)          => V[],
 
     /** Removes the last element from an array and returns that element. This method changes the length of the array and updates the state. */
-    pop:        ()                                              => V | undefined,
+    pop:            ()                                                  => V | undefined,
     /** Copies part of an array to another location in the same array and returns it without modifying its length. */
-    copyWithin: (target: number, start: number, end?: number)   => V[],
+    copyWithin:     (target: number, start: number, end?: number)       => V[],
     /** Fills all the elements of an array from a start index to an end index with a static value and updates the state. */
-    fill:       (value: V, start?: number , end?: number)       => V[],
+    fill:           (value: V, start?: number , end?: number)           => V[],
     /** Reverses an array in place. The first array element becomes the last, and the last array element becomes the first. This method updates the state. */
-    reverse:    ()                                              => V[],
+    reverse:        ()                                                  => V[],
     /** Removes the first element from an array and returns that removed element. This method changes the length of the array and updates the state. */
-    shift:      ()                                              => V | undefined,
+    shift:          ()                                                  => V | undefined,
+    /** Changes the contents of an array by removing elements. This method updates the state. */
+    splice:         (start: number, deleteCount?: number)               => V[],
     /** Changes the contents of an array by removing or replacing existing elements and/or adding new elements in place. This method updates the state. */
-    splice:     (start: number, deleteCount?: number)           => V[],
+    spliceInsert:   (start: number, deleteCount: number, ...items: V[]) => V[],
 
     /** Adds one or more elements to the end of an array and returns the new length of the array. This method changes the length of the array and updates the state. */
     push:       (...items: V[])                                 => number,
@@ -84,8 +86,11 @@ export const useArray = <V> (initial?: V[]) => {
     const state = useGeneric(initial ?? []);
 
     return {
-        get:            state.get,
-        set:            state.set,
+        get:        state.get,
+        set:        state.set,
+        compute:    state.compute,
+        equals:     state.equals,
+
         getValue:       (index: number)             => state.get()[index],
         getFirstValue:  ()                          => state.get()[0],
         getLastValue:   ()                          => state.get()[state.get().length - 1],
@@ -114,14 +119,15 @@ export const useArray = <V> (initial?: V[]) => {
         includes:       (searchElement: V, fromIndex?: number)  => state.get().includes(searchElement, fromIndex),
         slice:          (start?: number, end?: number)          => state.get().slice(start, end),
 
-        pop:        ()                                              => { const a = [...state.get()]; const o = a.pop();                             state.set(a); return o; },
-        push:       (...items: V[])                                 => { const a = [...state.get()]; const o = a.push(...items);                    state.set(a); return o; },
-        copyWithin: (target: number, start: number, end?: number)   => { const a = [...state.get()]; const o = a.copyWithin(target, start, end);    state.set(a); return o; },
-        fill:       (value: V, start?: number , end?: number)       => { const a = [...state.get()]; const o = a.fill(value, start, end);           state.set(a); return o; },
-        reverse:    ()                                              => { const a = [...state.get()]; const o = a.reverse();                         state.set(a); return o; },
-        splice:     (start: number, deleteCount?: number)           => { const a = [...state.get()]; const o = a.splice(start, deleteCount);        state.set(a); return o; },
-        shift:      ()                                              => { const a = [...state.get()]; const o = a.shift();                           state.set(a); return o; },
-        unshift:    (...items: V[])                                 => { const a = [...state.get()]; const o = a.unshift(...items);                 state.set(a); return o; },
+        pop:          ()                                                    => { const a = [...state.get()]; const o = a.pop();                                 state.set(a); return o; },
+        push:         (...items: V[])                                       => { const a = [...state.get()]; const o = a.push(...items);                        state.set(a); return o; },
+        copyWithin:   (target: number, start: number, end?: number)         => { const a = [...state.get()]; const o = a.copyWithin(target, start, end);        state.set(a); return o; },
+        fill:         (value: V, start?: number , end?: number)             => { const a = [...state.get()]; const o = a.fill(value, start, end);               state.set(a); return o; },
+        reverse:      ()                                                    => { const a = [...state.get()]; const o = a.reverse();                             state.set(a); return o; },
+        splice:       (start: number, deleteCount?: number)                 => { const a = [...state.get()]; const o = a.splice(start, deleteCount);            state.set(a); return o; },
+        spliceInsert: (start: number, deleteCount: number, ...items: V[])   => { const a = [...state.get()]; const o = a.splice(start, deleteCount, ...items);  state.set(a); return o; },
+        shift:        ()                                                    => { const a = [...state.get()]; const o = a.shift();                               state.set(a); return o; },
+        unshift:      (...items: V[])                                       => { const a = [...state.get()]; const o = a.unshift(...items);                     state.set(a); return o; },
 
         append:     (...items: V[])                                 => { const a = [...state.get()]; const o = a.push(...items);                    state.set(a); return o; },
         prepend:    (...items: V[])                                 => { const a = [...state.get()]; const o = a.unshift(...items);                 state.set(a); return o; },

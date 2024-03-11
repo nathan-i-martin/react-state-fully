@@ -35,6 +35,9 @@ export const useMap = <K, V> (initial?: Map<K, V>) => {
     return {
         get:        state.get,
         set:        state.set,
+        compute:    state.compute,
+        equals:     state.equals,
+
         getValue:   (key: K)           => state.get().get(key),
         put:        (key: K, value: V) => state.set(new Map(state.get()).set(key, value)),
         remove:     (key: K)           => { const newMap = new Map(state.get()); newMap.delete(key); state.set(newMap); },
