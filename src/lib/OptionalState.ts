@@ -82,7 +82,9 @@ export class Optional<T> {
     public static of = <T> (value: T) => new Optional(value);
 }
 
-type OptionalState<T> = GenericState<T> & Optional<T>;
+export type OptionalState<T> = GenericState<T> & Optional<T> & {
+    set: (value: Optional<T> | T | undefined)            => void,
+};
 export const useOptional = <T> (initial?: Optional<T> | T) => {
     const [state, setState] = useState(initial instanceof Optional ? initial : new Optional(initial));
 

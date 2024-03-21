@@ -3,7 +3,7 @@ import { useBoolean, BooleanState } from "./lib/BooleanState.js";
 import { GenericState, useGeneric } from "./lib/GenericState.js";
 import { useMap, MapState } from "./lib/MapState.js";
 import { useNumber, NumberState } from "./lib/NumberState.js";
-import { Optional, useOptional } from "./lib/OptionalState.js";
+import { Optional, OptionalState, useOptional } from "./lib/OptionalState.js";
 import { useSet, SetState } from "./lib/SetState.js";
 import { useString, StringState } from "./lib/StringState.js";
 
@@ -29,4 +29,5 @@ export {
     SetState,
     MapState,
     Optional,
+    OptionalState
 };
