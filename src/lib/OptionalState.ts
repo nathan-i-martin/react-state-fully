@@ -17,8 +17,8 @@ export class Optional<T> {
      * @param resolver A function that produces a value to be returned if the Optional is empty.
      * @returns The value if present, otherwise the result of the resolver function.
      */
-    public orElseGet = (resolver: () => T) => {
-        if(this.exists()) return this.value;
+    public orElseGet = (resolver: () => T): T => {
+        if(this.exists()) return this.value as T;
         return resolver();
     }
 
@@ -26,8 +26,8 @@ export class Optional<T> {
      * Returns the value if present, otherwise returns null.
      * @returns The value if present, otherwise null.
      */
-    public orElseNull = () => {
-        if(this.exists()) return this.value;
+    public orElseNull = (): T | null => {
+        if(this.exists()) return this.value as T;
         return null;
     }
 
@@ -35,18 +35,15 @@ export class Optional<T> {
      * Returns the value if present, otherwise returns undefined.
      * @returns The value if present, otherwise undefined.
      */
-    public orElseUndefined = () => {
-        if(this.exists()) return this.value;
-        return undefined;
-    }
+    public orElseUndefined = () => this.value;
 
     /**
      * Returns the contained value if present, otherwise throws an error produced by the resolver function or a generic error if no resolver is provided.
      * @param resolver An optional function that produces an error to be thrown if the Optional is empty.
      * @throws Error produced by the resolver or a generic error if the Optional is empty.
      */
-    public orElseThrow = (resolver?: () => Error) => {
-        if(this.exists()) return this.value;
+    public orElseThrow = (resolver?: () => Error): T => {
+        if(this.exists()) return this.value as T;
         if(resolver) throw resolver();
         throw new Error();
     }
@@ -55,18 +52,14 @@ export class Optional<T> {
      * Checks whether the Optional contains a value.
      * @returns True if there is a value present, otherwise false.
      */
-    public exists = () => {
-        return this.value != undefined;
-    }
+    public exists = () => this.value != undefined;
 
     /**
      * Compares the contained value with another Optional's value for equality.
      * @param other Another Optional object to compare with.
      * @returns True if both Optionals contain equal values or are both empty, otherwise false.
      */
-    public equals = (other: Optional<T>) => {
-        return other.orElseUndefined() === this.orElseUndefined();
-    }
+    public equals = (other: Optional<T>) => other.orElseUndefined() === this.orElseUndefined();
 
     /**
      * Creates an empty Optional instance.
