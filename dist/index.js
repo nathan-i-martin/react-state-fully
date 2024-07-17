@@ -165,11 +165,7 @@ class Optional {
      * Returns the value if present, otherwise returns undefined.
      * @returns The value if present, otherwise undefined.
      */
-    orElseUndefined = () => {
-        if (this.exists())
-            return this.value;
-        return undefined;
-    };
+    orElseUndefined = () => this.value;
     /**
      * Returns the contained value if present, otherwise throws an error produced by the resolver function or a generic error if no resolver is provided.
      * @param resolver An optional function that produces an error to be thrown if the Optional is empty.
@@ -186,17 +182,13 @@ class Optional {
      * Checks whether the Optional contains a value.
      * @returns True if there is a value present, otherwise false.
      */
-    exists = () => {
-        return this.value != undefined;
-    };
+    exists = () => this.value != undefined;
     /**
      * Compares the contained value with another Optional's value for equality.
      * @param other Another Optional object to compare with.
      * @returns True if both Optionals contain equal values or are both empty, otherwise false.
      */
-    equals = (other) => {
-        return other.orElseUndefined() === this.orElseUndefined();
-    };
+    equals = (other) => other.orElseUndefined() === this.orElseUndefined();
     /**
      * Creates an empty Optional instance.
      * @returns An empty Optional object.

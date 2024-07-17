@@ -45,7 +45,7 @@ export class Optional<T> {
     public orElseThrow = (resolver?: () => Error): T => {
         if(this.exists()) return this.value as T;
         if(resolver) throw resolver();
-        throw new Error();
+        throw new Error("Optional is empty.");
     }
 
     /**
